@@ -135,7 +135,6 @@ class SoundManager : public QObject {
 
     EngineMixer* m_pEngineMixer;
     UserSettingsPointer m_pConfig;
-    bool m_paInitialized;
     QList<SoundDevicePointer> m_devices;
     QList<CSAMPLE*> m_inputBuffers;
 
