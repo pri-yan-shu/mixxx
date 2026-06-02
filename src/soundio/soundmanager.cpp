@@ -42,7 +42,6 @@ SoundManager::SoundManager(UserSettingsPointer pConfig,
         EngineMixer* pEngineMixer)
         : m_pEngineMixer(pEngineMixer),
           m_pConfig(pConfig),
-          m_paInitialized(false),
           m_config(this),
           m_pErrorDevice(nullptr),
           m_underflowHappened(0),
