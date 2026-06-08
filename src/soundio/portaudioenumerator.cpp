@@ -46,6 +46,9 @@ void PortAudioEnumerator::initialize() {
         return;
     }
 
+    m_devices.clear();
+    m_jackSampleRate = mixxx::audio::SampleRate();
+
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     setJACKName();
 #endif
@@ -301,7 +304,13 @@ void PortAudioEnumerator::setJACKName() const {
 
 std::vector<std::string> PortAudioEnumerator::getAPIs() const {
     std::vector<std::string> apiList;
-    for (PaHostApiIndex i = 0; i < Pa_GetHostApiCount(); i++) {
+
+    int apiCount = Pa_GetHostApiCount();
+    if (apiCount < 0) {
+        return std::vector<std::string>{};
+    }
+
+    for (PaHostApiIndex i = 0; i < apiCount; i++) {
         const PaHostApiInfo* api = Pa_GetHostApiInfo(i);
         if (api && QString(api->name) != "skeleton implementation") {
             apiList.push_back(api->name);
@@ -331,6 +340,7 @@ QList<mixxx::audio::SampleRate> PortAudioEnumerator::getJackSampleRates() const 
 
 void PortAudioEnumerator::terminate() {
     PaError err = paNoError;
+
     if (m_initialized) {
         err = Pa_Terminate();
         if (err == paNoError) {

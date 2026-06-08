@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QObject>
+#include <string>
+#include <vector>
 
 #include "soundio/sounddevice.h"
 
