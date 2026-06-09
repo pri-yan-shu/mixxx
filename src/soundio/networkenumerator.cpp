@@ -5,8 +5,8 @@
 
 NetworkEnumerator::NetworkEnumerator(UserSettingsPointer config,
         SoundManager* sm)
-        : m_pNetworkStream(new EngineNetworkStream(2, 0)),
-          m_pDevice(new SoundDeviceNetwork(
+        : m_pNetworkStream(QSharedPointer<EngineNetworkStream>::create(2, 0)),
+          m_pDevice(QSharedPointer<SoundDeviceNetwork>::create(
                   config, sm, m_pNetworkStream)) {
 }
 
