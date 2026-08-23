@@ -681,8 +681,12 @@ void PipewireEnumerator::closeDevices() {
 void PipewireEnumerator::callback(const spa_io_position* pos) {
     // This must be the very first call, else timeInfo becomes invalid
     m_clkRefTimer.restart();
-    VisualPlayPosition::setCallbackEntryToDacSecs(
-            pos->clock.delay / pos->clock.rate.denom, m_clkRefTimer);
+
+    double adjustedRate = static_cast<double>(pos->clock.delay) *
+            pos->clock.rate.num / pos->clock.rate.denom / pos->clock.rate_diff;
+    double offset = static_cast<double>(pw_filter_get_nsec(m_pPwFilter) - pos->clock.nsec) * 1e-9;
+
+    VisualPlayPosition::setCallbackEntryToDacSecs(adjustedRate - offset, m_clkRefTimer);
 
     Trace trace("SoundDevicePw::callbackProcessClkRef");
 
